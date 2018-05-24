@@ -11,6 +11,9 @@ See the below [Environment Variables](#environment-variables) section for necess
 ### Supported Device Types
 This list will be updated as more device implementations become supported:
 - Switch (on/off)
+  - `{deviceId}/on`: Publish to this MQTT topic to turn on the device
+  - `{deviceId}/off`: Publish to this MQTT topic to turn off the device
+  - `{deviceId}/status`: Subscribe to this MQTT topic to receive status updates about the device
 
 ### Environment Variables
 #### Server
