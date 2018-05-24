@@ -8,6 +8,9 @@ The default client implementations contain device metadata within the `config.py
 These values must be unique across devices, so a UUID should be used for the device ID and a randomly generated, yet easily typed code, should be used for the pairing code.
 See the below [Environment Variables](#environment-variables) section for necessary variables to be set.
 
+### Supported Device Types
+This list will be updated as more device implementations become supported:
+- Switch (on/off)
 
 ### Environment Variables
 #### Server
