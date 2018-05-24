@@ -84,7 +84,7 @@ def listAlexaDevices(user=None):
         if device.deviceId in myDevices:
             results.append(device.toEndpoint())
     return jsonify(results)
-
+'''
 @app.route('/api/devices/register', methods=['POST'])
 @api_secret
 def registerDevice():
@@ -103,8 +103,9 @@ def registerDevice():
         return jsonify(
             status = 'unknown device type'
         ), 404
+'''
 
-@app.route('/api/devices/link', methods=['GET', 'POST'])
+@app.route('/api/devices/link', methods=['POST'])
 @user_secret
 def linkDevice(user=None):
     content = request.json
@@ -175,6 +176,7 @@ def handleStatusMessage(mosq, obj, msg):
 
 def handleOnlineMessage(mosq, obj, msg):
     if msg.topic == 'host/online': return
+
     payload = json.loads(msg.payload)
     state = payload.get('state')
     metadata = payload.get('metadata')

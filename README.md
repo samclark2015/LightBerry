@@ -1,19 +1,44 @@
 # LightBerry
 An open source home automation platform with Alexa integration
 
-Server exposes a REST API as well as a user dashboard for linking devices. Accounts managed by Auth0. Clients communicate through MQTT.
+Server exposes a REST API for device control, as well as provides a user dashboard for linking devices to accounts. User management provided by Auth0. Client devices communicate via MQTT.
 
 ### Setup
 The default client implementations contain device metadata within the `config.py` files. Values to be changed include `deviceId` and `pairingCode`.
 These values must be unique across devices, so a UUID should be used for the device ID and a randomly generated, yet easily typed code, should be used for the pairing code.
 See the below [Environment Variables](#environment-variables) section for necessary variables to be set.
 
+### REST Endpoints
+All endpoints require an authorization token provided by Auth0 passed through the `Authorization` header.
+- `GET /api/devices`
+  - List of devices as JSON
+  - Returns `[{ <deviceId>: <status> }, ...]`
+- `GET /api/devices/alex`
+  - Returns list of devices in JSON format appropriate for Alexa device discovery
+- `POST /api/devices/link`
+  - endpoint to link device to account
+  - Request body JSON: `{ 'pairingCode': '<pairingCode>' }`
+- `GET /api/devices/<deviceId>`
+  - Status of device as JSON:
+  - Returns `{ status: <status> }`
+- `GET /api/devices/<deviceId>`
+  - Set new state for device
+  - Request body JSON: `{ 'status': '<status>' }`
+
 ### Supported Device Types
 This list will be updated as more device implementations become supported:
+- Host (server)
+  - MQTT Topics
+    - `host/online`: Subscribe to receive messages when server comes online (useful for registering devices)
 - Switch (on/off)
-  - `{deviceId}/on`: Publish to this MQTT topic to turn on the device
-  - `{deviceId}/off`: Publish to this MQTT topic to turn off the device
-  - `{deviceId}/status`: Subscribe to this MQTT topic to receive status updates about the device
+  - Valid States
+    - Off: `0`
+    - On: `1`
+  - MQTT Topics
+    - `{deviceId}/online`: Subscribe to receive messages when the device requests to register with the server
+    - `{deviceId}/on`: Publish to turn on the device
+    - `{deviceId}/off`: Publish to turn off the device
+    - `{deviceId}/status`: Subscribe to receive status updates about the device
 
 ### Environment Variables
 #### Server
