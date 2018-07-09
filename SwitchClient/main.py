@@ -1,3 +1,4 @@
+import logging
 import paho.mqtt.client as mqtt
 from json import dumps as jsonify
 from enum import IntEnum
@@ -14,9 +15,12 @@ SERVER = os.getenv('MQTT_SERVER')
 PORT = int(os.getenv('MQTT_PORT'))
 SECRET = os.getenv('SECRET')
 
-
 headers = {'X-Secret': SECRET}
 deviceId = DEVICE.get('deviceId')
+
+# Logging setup
+log = open('lightberry.log')
+logging.basicConfig(format='%(asctime)s %(message)s', filename='lightberry.log')
 
 class Status(IntEnum):
     OFF = 0
@@ -69,10 +73,15 @@ def handleConnect(mqttc, obj, flags, rc):
 def handleServerMessage(mosq, obj, msg):
     registerDevice()
 
+def logMessage(mosq, obj, msg):
+    logging.info('recieved message on %s', msg.topic)
+
+
 #subscribe.callback(handleMessage, '{}/+'.format(deviceId), hostname=mqtt_server, port=mqtt_port)
 mqttc = mqtt.Client(client_id=deviceId)
 
 # Add message callbacks that will only trigger on a specific subscription match.
+mqttc.message_callback_add('*', logMessage)
 mqttc.message_callback_add('{}/on'.format(deviceId), handleOnMessage)
 mqttc.message_callback_add('{}/off'.format(deviceId), handleOffMessage)
 mqttc.message_callback_add('host/online', handleServerMessage)
