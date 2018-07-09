@@ -22,8 +22,7 @@ oauth = OAuth(app)
 app.secret_key = secret
 
 # Logging setup
-log = open('lightberry.log')
-logging.basicConfig(format='%(asctime)s %(message)s', filename='lightberry.log')
+logging.basicConfig(format='%(asctime)s %(message)s', filename='/var/log/lightberry.log')
 
 auth0 = oauth.register(
     'auth0',
@@ -211,6 +210,5 @@ if __name__ == '__main__':
 
 def onExit():
     saveData('data.pkl', store)
-    close(log)
 
 atexit.register(onExit)
