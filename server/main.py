@@ -1,4 +1,4 @@
-import atexit
+import atexit, logging
 from flask import Flask, jsonify, request
 from functools import wraps
 from appliances import Status, SwitchDevice
@@ -20,6 +20,9 @@ secret = os.getenv('SECRET')
 app = Flask(__name__)
 oauth = OAuth(app)
 app.secret_key = secret
+
+# Logging setup
+logging.basicConfig(format='%(asctime)s %(message)s', filename='/var/log/lightberry.log')
 
 auth0 = oauth.register(
     'auth0',
@@ -191,6 +194,10 @@ def handleConnect(mqttc, obj, flags, rc):
     mqttc.subscribe('+/online', 0)
     mqttc.publish('host/online')
 
+def logMessage(mosq, obj, msg):
+    logging.info('recieved message on %s', msg.topic)
+
+mqttc.message_callback_add('*', logMessage)
 mqttc.message_callback_add('+/status', handleStatusMessage)
 mqttc.message_callback_add('+/online', handleOnlineMessage)
 mqttc.on_connect = handleConnect
