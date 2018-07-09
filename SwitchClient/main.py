@@ -19,7 +19,7 @@ headers = {'X-Secret': SECRET}
 deviceId = DEVICE.get('deviceId')
 
 # Logging setup
-log = open('lightberry.log')
+#log = open('lightberry.log')
 logging.basicConfig(format='%(asctime)s %(message)s', filename='lightberry.log')
 
 class Status(IntEnum):
