@@ -36,7 +36,7 @@ class Device:
 
     def registerMqtt(self, mqtt):
         # Register callbacks
-        deviceId = self.config.get('deviceId')
+        deviceId = self.__config.get('deviceId')
         payload = jsonify({
             'metadata': DEVICE,
             'state': self.getStatus()
@@ -45,7 +45,7 @@ class Device:
         mqtt.message_callback_add('{}/off'.format(deviceId), self.handleOffMessage)
         mqttc.publish("{}/online".format(deviceId), payload)
 
-        pairingCode = self.config.get('pairingCode')
+        pairingCode = self.__config.get('pairingCode')
         print("Connected. Pairing code: {}".format(pairingCode))
 
     def handleOnMessage(self, mosq, obj, msg):
