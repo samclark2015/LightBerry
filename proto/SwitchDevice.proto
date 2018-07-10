@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package lightberry;
+
+enum SwitchDeviceState {
+  OFF = 0;
+  ON = 1;
+}
+
+message SwitchDeviceRegister {
+  optional SwitchDeviceState state = 0;
+  required String metadata = 1;
+}
+
+message SwitchDeviceStatus {
+  required SwitchDeviceState state = 0;
+}
