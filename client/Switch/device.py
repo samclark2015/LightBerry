@@ -44,15 +44,15 @@ class Device:
         })
         mqtt.message_callback_add('{}/on'.format(deviceId), self.handleOnMessage)
         mqtt.message_callback_add('{}/off'.format(deviceId), self.handleOffMessage)
-        mqttc.publish("{}/online".format(deviceId), payload)
+        mqtt.publish("{}/online".format(deviceId), payload)
 
         pairingCode = self.__config.get('pairingCode')
         print("Connected. Pairing code: {}".format(pairingCode))
 
     def handleOnMessage(self, mosq, obj, msg):
-        controller.setStatus(Status.ON)
+        self.__controller.setStatus(Status.ON)
         publishStatus()
 
     def handleOffMessage(self, mosq, obj, msg):
-        controller.setStatus(Status.OFF)
+        self.__controller.setStatus(Status.OFF)
         publishStatus()
