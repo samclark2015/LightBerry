@@ -15,7 +15,7 @@ Device = import_module('{}.device'.format(deviceClass)).Device
 device = Device()
 
 # Logging setup
-logging.basicConfig(format='%(asctime)s %(message)s', filename='/var/log/lightberry.log')
+logging.basicConfig(format='%(asctime)s %(message)s', filename='/var/log/lightberry.log', level=logging.INFO)
 
 def handleConnect(mqttc, obj, flags, rc):
     mqttc.subscribe('host/+', 0)
@@ -26,13 +26,13 @@ def handleServerMessage(mosq, obj, msg):
     device.registerMqtt(mqttc)
 
 def logMessage(mosq, obj, msg):
-    logging.info('recieved message on %s', msg.topic)
+    logging.info('Recieved message on %s', msg.topic)
 
 
 mqttc = mqtt.Client(client_id=device.getId())
 
 # Add message callbacks that will only trigger on a specific subscription match.
-mqttc.message_callback_add('*', logMessage)
+mqttc.message_callback_add('#', logMessage)
 mqttc.message_callback_add('host/online', handleServerMessage)
 
 mqttc.on_connect = handleConnect
