@@ -15,4 +15,4 @@ if [ ! -f "$SETUP_FILE" ]; then
 	touch $SETUP_FILE
 fi
 
-python3 $CLIENT_DIR/main.py
+python3 ./main.py
