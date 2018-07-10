@@ -1,0 +1,4 @@
+export MQTT_SERVER=samclark.me
+export MQTT_PORT=1883
+export SECRET=':M:^i@JIr6T3R(0j`??|*6ApxtC)Uo1kzmpUvVW[$MMK5`n:I9G|_Gq68sA3d&B'
+export DEVICE_CLASS=Test
