@@ -4,12 +4,6 @@ from enum import IntEnum
 from json import dumps as jsonify
 from .config import DEVICE
 
-def publishStatus(mqtt):
-    payload = jsonify({
-        'state': device.getStatus()
-    })
-    mqtt.publish("{}/status".format(device.getId()), payload)
-
 class Status(IntEnum):
     OFF = 0
     ON = 1
@@ -41,6 +35,12 @@ class Device:
     def getStatus(self):
         return self.__controller.getStatus()
 
+    def publishStatus(self, mqtt):
+        payload = jsonify({
+            'state': self.getStatus()
+        })
+        mqtt.publish("{}/status".format(self.getId()), payload)
+
     def registerMqtt(self, mqtt):
         # Register callbacks
         deviceId = self.__config.get('deviceId')
@@ -57,8 +57,8 @@ class Device:
 
     def handleOnMessage(self, mosq, obj, msg):
         self.__controller.setStatus(Status.ON)
-        publishStatus(mosq)
+        self.publishStatus(mosq)
 
     def handleOffMessage(self, mosq, obj, msg):
         self.__controller.setStatus(Status.OFF)
-        publishStatus(mosq)
+        self.publishStatus(mosq)
