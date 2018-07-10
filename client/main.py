@@ -17,12 +17,6 @@ device = Device()
 # Logging setup
 logging.basicConfig(format='%(asctime)s %(message)s', filename='/var/log/lightberry.log')
 
-def publishStatus():
-    payload = jsonify({
-        'state': device.getStatus()
-    })
-    mqttc.publish("{}/status".format(device.getId()), payload)
-
 def handleConnect(mqttc, obj, flags, rc):
     mqttc.subscribe('host/+', 0)
     mqttc.subscribe('{}/+'.format(device.getId()), 0)
