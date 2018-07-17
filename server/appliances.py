@@ -17,6 +17,7 @@ class Status(IntEnum):
 class SwitchDevice:
     def __init__(self, data, state):
         self.__status = state
+        self.__lastHeartbeat = None
         self.deviceId = data.get('deviceId')
         self.pairingCode = data.get('pairingCode')
         self.type = data.get('type')
@@ -24,6 +25,7 @@ class SwitchDevice:
         self.friendlyName = data.get('friendlyName')
         self.description = data.get('description')
         self.alexa = data.get('alexa')
+
 
     def toEndpoint(self):
         endpoint = {
