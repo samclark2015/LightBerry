@@ -29,7 +29,7 @@ def loadData(filename):
         store = unpickler.load()
         pickleFile.close()
         print('Data loaded.')
-    except Error as error:
+    except Exception as error:
         store = Store()
         print('New data store.')
         print(error)
