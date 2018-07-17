@@ -18,15 +18,15 @@ device = Device()
 # Logging setup
 logging.basicConfig(format='%(asctime)s %(message)s', filename='/var/log/lightberry.log', level=logging.INFO)
 
-def heartbeat():
-    mqtt.publish("{}/heartbeat".format(device.getId()), 'OK')
-    Timer(5.0, heartbeat).start()
+def heartbeat(mqttc):
+    mqttc.publish("{}/heartbeat".format(device.getId()), 'OK')
+    Timer(3.0, heartbeat, [mqttc]).start()
 
 def handleConnect(mqttc, obj, flags, rc):
     mqttc.subscribe('host/+', 0)
     mqttc.subscribe('{}/+'.format(device.getId()), 0)
     device.registerMqtt(mqttc)
-    heartbeat()
+    heartbeat(mqttc)
 
 def handleServerMessage(mosq, obj, msg):
     device.registerMqtt(mqttc)
