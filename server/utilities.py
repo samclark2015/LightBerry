@@ -29,9 +29,10 @@ def loadData(filename):
         store = unpickler.load()
         pickleFile.close()
         print('Data loaded.')
-    except:
+    except Error as error:
         store = Store()
         print('New data store.')
+        print(error)
     return store
 
 def saveData(filename, store):
