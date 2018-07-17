@@ -5,7 +5,7 @@ from appliances import Status, SwitchDevice
 import json, re, os
 import paho.mqtt.client as mqtt
 from utilities import loadData, saveData, getUserFromToken
-from dashboard import getDashboard
+from frontend.dashboard import getDashboard
 from authlib.flask.client import OAuth
 from dotenv import load_dotenv
 
@@ -87,26 +87,6 @@ def listAlexaDevices(user=None):
         if device.deviceId in myDevices:
             results.append(device.toEndpoint())
     return jsonify(results)
-'''
-@app.route('/api/devices/register', methods=['POST'])
-@api_secret
-def registerDevice():
-    content = request.json
-    state = content.get('state')
-    metadata = content.get('metadata')
-    type = metadata.get('type')
-    if type == 'switch':
-        store.Devices.append(
-            SwitchDevice(metadata, Status(state))
-            )
-        return jsonify(
-            status = 'added'
-        )
-    else:
-        return jsonify(
-            status = 'unknown device type'
-        ), 404
-'''
 
 @app.route('/api/devices/link', methods=['POST'])
 @user_secret
