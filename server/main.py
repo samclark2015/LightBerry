@@ -189,9 +189,16 @@ def handleOnlineMessage(mosq, obj, msg):
             SwitchDevice(metadata, Status(state))
             )
 
+def handleHeartbeatMessage(mqttc, obj, msg):
+    id = getClientId(msg.topic)
+    device = store.getDevice(id)
+    if device != None:
+        device.updateHeartbeat()
+
 def handleConnect(mqttc, obj, flags, rc):
     mqttc.subscribe('+/status', 0)
     mqttc.subscribe('+/online', 0)
+    mqttc.subscribe('+/heartbeat', 0)
     mqttc.publish('host/online')
 
 def logMessage(mosq, obj, msg):

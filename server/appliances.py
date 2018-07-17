@@ -1,6 +1,6 @@
 from enum import IntEnum
 import paho.mqtt.publish as publish
-import os
+import os, datetime
 from dotenv import load_dotenv
 
 from pathlib import Path  # python3 only
@@ -47,6 +47,13 @@ class SwitchDevice:
             publish.single(topic, hostname=mqtt_server, port=mqtt_port)
         self.__status = status
         return self.__status
+
+    def updateHeartbeat(self):
+        self.__lastHeartbeat = datetime.datetime.now()
+
+    def isOnline(self, maxD=5.0):
+        delta = datetime.datetime.now() - self.lastHeartbeat
+        return delta.seconds <= maxD
 
     def getStatus(self):
         return self.__status

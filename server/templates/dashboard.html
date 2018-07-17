@@ -16,6 +16,7 @@
             <h6 class="align-middle">
               {{ device.friendlyName }}
               <span class="badge badge-secondary">{{ 'On' if device.getStatus().name == 'ON' else 'Off' }}</span>
+              <span class="badge badge-secondary">{{ 'Online' if device.isOnline() else 'Off;ine' }}</span>
               <form method="post" class="form-inline float-right" action="/link">
                 <input type="hidden" name="method" value="DELETE">
                 <input type="hidden" name="device-id" value="{{ device.deviceId }}">
