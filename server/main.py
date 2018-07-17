@@ -207,6 +207,7 @@ def logMessage(mosq, obj, msg):
 mqttc.message_callback_add('*', logMessage)
 mqttc.message_callback_add('+/status', handleStatusMessage)
 mqttc.message_callback_add('+/online', handleOnlineMessage)
+mqttc.message_callback_add('+/heartbeat', handleHeartbeatMessage)
 mqttc.on_connect = handleConnect
 mqttc.connect(mqtt_server, mqtt_port, 60)
 mqttc.loop_start()
