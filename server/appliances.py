@@ -52,6 +52,7 @@ class SwitchDevice:
         self.__lastHeartbeat = datetime.datetime.now()
 
     def isOnline(self, maxD=5.0):
+        if not self.__lastHeartbeat: return False
         delta = datetime.datetime.now() - self.__lastHeartbeat
         return delta.seconds <= maxD
 
