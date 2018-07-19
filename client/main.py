@@ -1,7 +1,9 @@
-import logging, os, sys, sched, time
+import logging, os, sys
 import paho.mqtt.client as mqtt
 from importlib import import_module
 from json import dumps as jsonify
+from threading import Timer
+
 SERVER = os.getenv('MQTT_SERVER')
 PORT = int(os.getenv('MQTT_PORT'))
 SECRET = os.getenv('SECRET')
@@ -16,19 +18,15 @@ device = Device()
 # Logging setup
 logging.basicConfig(format='%(asctime)s %(message)s', filename='/var/log/lightberry.log', level=logging.INFO)
 
-# Heartbeat scheduler
-scheduler = sched.scheduler(time.time, time.sleep)
-
 def heartbeat(mqttc):
     mqttc.publish("{}/heartbeat".format(device.getId()), 'OK')
-    scheduler.enter(3.0, 1, heartbeat, [mqttc])
+    Timer(3.0, heartbeat, [mqttc]).start()
 
 def handleConnect(mqttc, obj, flags, rc):
     mqttc.subscribe('host/+', 0)
     mqttc.subscribe('{}/+'.format(device.getId()), 0)
     device.registerMqtt(mqttc)
-    scheduler.enter(3.0, 1, heartbeat, [mqttc])
-    scheduler.run()
+    heartbeat(mqttc)
 
 def handleServerMessage(mosq, obj, msg):
     device.registerMqtt(mqttc)
