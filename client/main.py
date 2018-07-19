@@ -19,15 +19,15 @@ logging.basicConfig(format='%(asctime)s %(message)s', filename='/var/log/lightbe
 # Heartbeat scheduler
 scheduler = sched.scheduler(time.time, time.sleep)
 
-def heartbeat(s, mqttc):
+def heartbeat(mqttc):
     mqttc.publish("{}/heartbeat".format(device.getId()), 'OK')
-    s.enter(3.0, 1, heartbeat, [s, mqttc])
+    scheduler.enter(3.0, 1, heartbeat, [mqttc])
 
 def handleConnect(mqttc, obj, flags, rc):
     mqttc.subscribe('host/+', 0)
     mqttc.subscribe('{}/+'.format(device.getId()), 0)
     device.registerMqtt(mqttc)
-    scheduler.enter(3.0, 1, heartbeat, [s, mqttc])
+    scheduler.enter(3.0, 1, heartbeat, [mqttc])
     scheduler.run()
 
 def handleServerMessage(mosq, obj, msg):
